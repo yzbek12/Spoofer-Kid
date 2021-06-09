@@ -33,14 +33,12 @@ int main() {
 		ForEachSubkey(key, {
 			HKEY parent = key;
 			WCHAR spoof[MAX_PATH] = { 0 };
-
 			OpenThen(HKEY_LOCAL_MACHINE, L"HARDWARE\\DEVICEMAP\\VIDEO", {
 				DWORD count = 0;
 				DWORD size = sizeof(count);
 				if (GetKeyValue(key, L"MaxObjectNumber", (LPBYTE)&count, &size)) {
 					WCHAR video[MAX_PATH] = { 0 };
 					WCHAR path[MAX_PATH] = { 0 };
-
 					for (DWORD i = 0; i < count; ++i) {
 						size = sizeof(path);
 						wsprintf(video, L"\\Device\\Video%d", i);
@@ -52,7 +50,6 @@ int main() {
 									OutSpoofUnique(spoof);
 									RenameSubkey(parent, name, spoof);
 								}
-
 								memcpy(replace, spoof, wcslen(spoof) * 2);
 								RegSetValueEx(key, video, 0, REG_SZ, (PBYTE)path, size);
 							}
